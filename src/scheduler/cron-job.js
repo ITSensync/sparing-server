@@ -11,12 +11,12 @@ async function noInternetNotification() {
 
   try {
     const resultLatest = await waterQualityService.getLatest();
-    
-    const latestData = resultLatest.data
-    if (!latestData){
-      throw new Error('Error get latest data!');
+
+    const latestData = resultLatest.data;
+    if (!latestData) {
+      throw new Error('No Latest data found!');
     }
-    
+
     const targetDate = new Date(latestData.createdAt);
 
     // Mendapatkan waktu saat ini
@@ -38,10 +38,8 @@ async function noInternetNotification() {
         await telegramService.sendNotification(message, chatId);
       });
     }
-
   } catch (error) {
     console.error(error);
-    throw new Error(error.message);
   }
 }
 
