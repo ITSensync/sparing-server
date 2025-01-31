@@ -24,15 +24,14 @@ async function getLatest() {
   try {
     const result = await WaterQuality.findOne({
       order: [
-        ['createdAt', 'asc']
-      ]
-    })
+        ['createdAt', 'asc'],
+      ],
+    });
 
     return {
       status: 200,
       data: result,
     };
-
   } catch (error) {
     console.error(error);
     throw new Error(error);
@@ -84,7 +83,7 @@ async function update(body, unixtime) {
     return {
       status: 500,
       message: 'UPDATE WATER QUALITY DATA FAILED',
-      stack: error
+      stack: error,
     };
   }
 }
