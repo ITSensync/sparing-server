@@ -69,7 +69,12 @@ async function update(body, unixtime) {
       where: { unixtime },
     });
 
-    updatedData.status = body.status;
+    if (body.status_2m) {
+      updatedData.status_2m = body.status_2m;
+    }
+    if (body.status_1h) {
+      updatedData.status_1h = body.status_1h;
+    }
     updatedData.feedback = body.feedback;
 
     updatedData.save();
