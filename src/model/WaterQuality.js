@@ -54,9 +54,14 @@ const WaterQuality = db.define('sparing12', {
     allowNull: false,
     defaultValue: 0,
   },
-  status: {
+  status_2m: {
     type: DataTypes.BOOLEAN,
     allowNull: true,
+  },
+  status_1h: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true,
+    defaultValue: false,
   },
   feedback: {
     type: DataTypes.STRING,
