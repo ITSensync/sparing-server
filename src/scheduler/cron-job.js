@@ -28,7 +28,7 @@ async function noInternetNotification() {
     // Mengonversi milidetik ke menit
     const differenceInMinutes = Math.floor(differenceInMillis / (1000 * 60));
 
-    if (differenceInMinutes > 10) {
+    if (differenceInMinutes < 10) {
       console.log('Sparing Local Device Connected with Internet');
     } else {
       const message = 'No Internet Connection on Sparing Local Device';
