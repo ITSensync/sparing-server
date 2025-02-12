@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get('/', waterQualityController.getAllData);
 router.post('/', waterQualityController.addData);
-router.put('/:unixtime', waterQualityController.updateData);
+router.patch('/:unixtime', waterQualityController.updateData);
 
 module.exports = router;
