@@ -24,7 +24,7 @@ async function getLatest() {
   try {
     const result = await WaterQuality.findOne({
       order: [
-        ['createdAt', 'asc'],
+        ['createdAt', 'desc'],
       ],
     });
 
