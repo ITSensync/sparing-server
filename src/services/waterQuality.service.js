@@ -69,6 +69,8 @@ async function update(body, unixtime) {
       where: { unixtime },
     });
 
+    console.log(body);
+    console.log(updatedData.feedback);
     if (body.status_2m) {
       updatedData.status_2m = body.status_2m;
     }
