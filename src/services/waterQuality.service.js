@@ -43,7 +43,7 @@ async function add(req) {
     // create input fields
     const requestBody = req.body;
 
-    const result = await WaterQuality.create(requestBody.input);
+    const result = await WaterQuality.create(requestBody.inputServer);
 
     if (!result) {
       return {
