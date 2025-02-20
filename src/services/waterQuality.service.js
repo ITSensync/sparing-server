@@ -1,3 +1,4 @@
+const defineDynamicModel = require('../model/DynamicData');
 const { WaterQuality } = require('../model/WaterQuality');
 
 async function get() {
@@ -41,9 +42,22 @@ async function getLatest() {
 async function add(req) {
   try {
     // create input fields
-    const requestBody = req.body;
+    const whitelistTable = ['sparing01','sparing02','sparing03','sparing04','sparing05','sparing06','sparing07','sparing08','sparing09','sparing10','sparing11','sparing12','sparing13',]
 
-    const result = await WaterQuality.create(requestBody.inputServer);
+    const { table_name, data } = req.body;
+
+    if (whitelistTable.include(table_name)) {
+      return {
+        status: 400,
+        message: 'TABLE NAME NOT VALID'
+      }
+    }
+
+    const DynamicModel = defineDynamicModel(table_name);
+
+    await DynamicModel.sync()
+
+    // const result = await WaterQuality.create(requestBody.inputServer);
 
     if (!result) {
       return {

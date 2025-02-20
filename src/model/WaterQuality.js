@@ -2,6 +2,8 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/db.config');
 
+
+
 const WaterQuality = db.define('sparing12', {
   id: {
     allowNull: false,
