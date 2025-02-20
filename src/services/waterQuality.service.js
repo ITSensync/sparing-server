@@ -42,20 +42,23 @@ async function getLatest() {
 async function add(req) {
   try {
     // create input fields
-    const whitelistTable = ['sparing01','sparing02','sparing03','sparing04','sparing05','sparing06','sparing07','sparing08','sparing09','sparing10','sparing11','sparing12','sparing13',]
+    const whitelistTable = ['sparing01', 'sparing02', 'sparing03', 'sparing04', 'sparing05', 'sparing06', 'sparing07', 'sparing08', 'sparing09', 'sparing10', 'sparing11', 'sparing12', 'sparing13'];
 
-    const { table_name, data } = req.body;
+    console.log(req.body);
+    const { inputServer } = req.body;
 
-    if (whitelistTable.include(table_name)) {
+    if (!whitelistTable.includes(inputServer.ids)) {
       return {
         status: 400,
-        message: 'TABLE NAME NOT VALID'
-      }
+        message: 'TABLE NAME NOT VALID',
+      };
     }
 
-    const DynamicModel = defineDynamicModel(table_name);
+    const DynamicModel = defineDynamicModel(inputServer.ids);
 
-    await DynamicModel.sync()
+    await DynamicModel.sync();
+
+    const result = await DynamicModel.create(inputServer);
 
     // const result = await WaterQuality.create(requestBody.inputServer);
 

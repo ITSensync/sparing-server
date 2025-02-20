@@ -23,7 +23,7 @@ app.use(express.json());
 (async () => {
   try {
     await sequelize.authenticate();
-    WaterQuality.sync({ alter: true });
+    // WaterQuality.sync({ alter: true });
     UserTelegram.sync();
     console.log('Connection to the database has been established successfully.');
   } catch (error) {
