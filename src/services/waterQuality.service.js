@@ -1,4 +1,5 @@
-const defineDynamicModel = require('../model/DynamicData');
+const defineDynamicNewModel = require('../model/DynamicNewData');
+const defineDynamicOldModel = require('../model/DynamicOldData');
 const { WaterQuality } = require('../model/WaterQuality');
 
 async function get() {
@@ -45,7 +46,7 @@ async function add(req) {
     const whitelistOldTable = ['sparing01', 'sparing02', 'sparing03', 'sparing04', 'sparing05', 'sparing06', 'sparing07', 'sparing08', 'sparing09', 'sparing10', 'sparing11'];
     const whitelistNewTable = ['sparing12', 'sparing13'];
     console.log(req.body);
-    const { inputServer } = req.body;
+    const inputServer = req.body;
 
     if (!whitelistOldTable.includes(inputServer.ids)
       && !whitelistNewTable.includes(inputServer.ids)) {
@@ -55,23 +56,16 @@ async function add(req) {
       };
     }
 
-    const DynamicModel = defineDynamicModel(inputServer.ids);
-
-    await DynamicModel.sync();
-
     let result = null;
 
     if (whitelistOldTable.includes(inputServer.ids)) {
-      const { createdAt, diff_debit, ...input } = inputServer;
-      const inputServerOld = {
-        ...input,
-        debit2: diff_debit,
-        time: createdAt,
-      };
-
-      result = await DynamicModel.create(inputServerOld);
+      const DynamicOldModel = defineDynamicOldModel(inputServer.ids);
+      await DynamicOldModel.sync();
+      result = await DynamicOldModel.create(inputServer);
     } else {
-      result = await DynamicModel.create(inputServer);
+      const DynamicNewModel = defineDynamicNewModel(inputServer.ids);
+      await DynamicNewModel.sync();
+      result = await DynamicNewModel.create(inputServer);
     }
 
     // const result = await WaterQuality.create(requestBody.inputServer);
