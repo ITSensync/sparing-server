@@ -42,12 +42,13 @@ async function getLatest() {
 async function add(req) {
   try {
     // create input fields
-    const whitelistTable = ['sparing01', 'sparing02', 'sparing03', 'sparing04', 'sparing05', 'sparing06', 'sparing07', 'sparing08', 'sparing09', 'sparing10', 'sparing11', 'sparing12', 'sparing13'];
-
+    const whitelistOldTable = ['sparing01', 'sparing02', 'sparing03', 'sparing04', 'sparing05', 'sparing06', 'sparing07', 'sparing08', 'sparing09', 'sparing10', 'sparing11'];
+    const whitelistNewTable = ['sparing12', 'sparing13'];
     console.log(req.body);
     const { inputServer } = req.body;
 
-    if (!whitelistTable.includes(inputServer.ids)) {
+    if (!whitelistOldTable.includes(inputServer.ids)
+      && !whitelistNewTable.includes(inputServer.ids)) {
       return {
         status: 400,
         message: 'TABLE NAME NOT VALID',
@@ -58,7 +59,20 @@ async function add(req) {
 
     await DynamicModel.sync();
 
-    const result = await DynamicModel.create(inputServer);
+    let result = null;
+
+    if (whitelistOldTable.includes(inputServer.ids)) {
+      const { createdAt, diff_debit, ...input } = inputServer;
+      const inputServerOld = {
+        ...input,
+        debit2: diff_debit,
+        time: createdAt,
+      };
+
+      result = await DynamicModel.create(inputServerOld);
+    } else {
+      result = await DynamicModel.create(inputServer);
+    }
 
     // const result = await WaterQuality.create(requestBody.inputServer);
 
