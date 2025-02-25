@@ -49,11 +49,6 @@ function defineDynamicOldModel(tableName) {
       allowNull: false,
       defaultValue: 0,
     },
-    rs_stat: {
-      type: DataTypes.FLOAT,
-      allowNull: true,
-      defaultValue: 0,
-    },
     umpanbalik: {
       type: DataTypes.STRING,
       allowNull: true,
