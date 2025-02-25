@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/db.config');
 
-function defineDynamicModel(tableName) {
+function defineDynamicNewModel(tableName) {
   return db.define(tableName, {
     id: {
       allowNull: false,
@@ -51,7 +51,7 @@ function defineDynamicModel(tableName) {
     },
     rs_stat: {
       type: DataTypes.FLOAT,
-      allowNull: false,
+      allowNull: true,
       defaultValue: 0,
     },
     status_2m: {
@@ -73,4 +73,4 @@ function defineDynamicModel(tableName) {
   });
 }
 
-module.exports = defineDynamicModel;
+module.exports = defineDynamicNewModel;
