@@ -1,3 +1,4 @@
+const { Device } = require('../model/Device');
 const defineDynamicNewModel = require('../model/DynamicNewData');
 const defineDynamicOldModel = require('../model/DynamicOldData');
 const { WaterQuality } = require('../model/WaterQuality');
@@ -57,23 +58,37 @@ async function add(req) {
     }
 
     let result = null;
+    let result_device = null;
 
     if (whitelistOldTable.includes(inputServer.ids)) {
       const DynamicOldModel = defineDynamicOldModel(inputServer.ids);
       await DynamicOldModel.sync();
       result = await DynamicOldModel.create(inputServer);
+
+      // ADD TO DEVICE TBL
+      const now = new Date();
+      now.setSeconds(0, 0);
+      const inputDevice = {
+        id_device: inputServer.ids,
+        last_update: now,
+        cod: inputServer.cod,
+        tss: inputServer.tss,
+        ph: inputServer.ph,
+        debit: inputServer.debit,
+        debit2: inputServer.diff_debit,
+        umpanbalik: inputServer.feedback,
+      };
+      result_device = await Device.upsert(inputDevice);
     } else {
       const DynamicNewModel = defineDynamicNewModel(inputServer.ids);
       await DynamicNewModel.sync();
       result = await DynamicNewModel.create(inputServer);
     }
 
-    // const result = await WaterQuality.create(requestBody.inputServer);
-
-    if (!result) {
+    if (!result && !result_device) {
       return {
         status: 500,
-        message: 'ERROR ADD SENSOR DATA',
+        message: 'ERROR ADD AND UPDATE SENSOR DATA',
       };
     }
 

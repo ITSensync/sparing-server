@@ -12,6 +12,7 @@ const api = require('./api');
 const { WaterQuality } = require('./model/WaterQuality');
 const { UserTelegram } = require('./model/UserTelegram');
 const cronJob = require('./scheduler/cron-job');
+const { Device } = require('./model/Device');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(express.json());
     await sequelize.authenticate();
     // WaterQuality.sync({ alter: true });
     UserTelegram.sync();
+    // Device.sync({ alter: true });
     console.log('Connection to the database has been established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
