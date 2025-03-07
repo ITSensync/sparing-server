@@ -66,11 +66,9 @@ async function add(req) {
       result = await DynamicOldModel.create(inputServer);
 
       // ADD TO DEVICE TBL
-      const now = new Date();
-      now.setSeconds(0, 0);
       const inputDevice = {
         id_device: inputServer.ids,
-        last_update: now,
+        last_update: inputServer.createdAt,
         cod: inputServer.cod,
         tss: inputServer.tss,
         ph: inputServer.ph,
