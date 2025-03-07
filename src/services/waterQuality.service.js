@@ -64,6 +64,10 @@ async function add(req) {
       const DynamicOldModel = defineDynamicOldModel(inputServer.ids);
       await DynamicOldModel.sync();
       result = await DynamicOldModel.create(inputServer);
+    } else {
+      const DynamicNewModel = defineDynamicNewModel(inputServer.ids);
+      await DynamicNewModel.sync();
+      result = await DynamicNewModel.create(inputServer);
 
       // ADD TO DEVICE TBL
       const inputDevice = {
@@ -76,11 +80,11 @@ async function add(req) {
         debit2: inputServer.diff_debit,
         umpanbalik: inputServer.feedback,
       };
-      result_device = await Device.upsert(inputDevice);
-    } else {
-      const DynamicNewModel = defineDynamicNewModel(inputServer.ids);
-      await DynamicNewModel.sync();
-      result = await DynamicNewModel.create(inputServer);
+      result_device = await Device.update(inputDevice, {
+        where: {
+          id_device: inputServer.ids,
+        },
+      });
     }
 
     if (!result && !result_device) {
