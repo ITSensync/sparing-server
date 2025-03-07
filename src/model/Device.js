@@ -22,6 +22,10 @@ const Device = db.define('device_tbl', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  ph: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+  },
   cod: {
     type: DataTypes.FLOAT,
     allowNull: true,
