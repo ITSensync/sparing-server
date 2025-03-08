@@ -2,8 +2,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/db.config');
 
-
-
 const WaterQuality = db.define('sparing12', {
   id: {
     allowNull: false,
@@ -46,32 +44,28 @@ const WaterQuality = db.define('sparing12', {
     allowNull: false,
     defaultValue: 0,
   },
-  diff_debit: {
+  debit2: {
     type: DataTypes.FLOAT,
     allowNull: false,
     defaultValue: 0,
-  },
-  rs_stat: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
-    defaultValue: 0,
-  },
-  status_2m: {
-    type: DataTypes.BOOLEAN,
-    allowNull: true,
   },
   status_1h: {
     type: DataTypes.BOOLEAN,
     allowNull: true,
     defaultValue: false,
   },
-  feedback: {
+  umpanbalik: {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  time: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    defaultValue: DataTypes.NOW,
+  },
 }, {
   freezeTableName: true,
-  timestamps: true,
+  timestamps: false,
 });
 
 module.exports = {

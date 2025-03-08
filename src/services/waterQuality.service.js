@@ -27,7 +27,7 @@ async function getLatest() {
   try {
     const result = await WaterQuality.findOne({
       order: [
-        ['createdAt', 'desc'],
+        ['time', 'desc'],
       ],
     });
 
@@ -66,8 +66,18 @@ async function add(req) {
       result = await DynamicOldModel.create(inputServer);
     } else {
       const DynamicNewModel = defineDynamicNewModel(inputServer.ids);
-      await DynamicNewModel.sync();
-      result = await DynamicNewModel.create(inputServer);
+      await DynamicNewModel.sync({ alter: true });
+
+      const {
+        rs_stat, feedback, createdAt, diff_debit, ...rawInputServer
+      } = inputServer;
+      const formattedBody = {
+        ...rawInputServer,
+        debit2: diff_debit,
+        umpanbalik: feedback,
+        time: createdAt,
+      };
+      result = await DynamicNewModel.create(formattedBody);
 
       // ADD TO DEVICE TBL
       const inputDevice = {
@@ -111,15 +121,10 @@ async function update(body, unixtime) {
       where: { unixtime },
     });
 
-    console.log(body);
-    console.log(updatedData.feedback);
-    if (body.status_2m) {
-      updatedData.status_2m = body.status_2m;
-    }
     if (body.status_1h) {
       updatedData.status_1h = body.status_1h;
     }
-    updatedData.feedback = body.feedback;
+    updatedData.umpanbalik = body.feedback;
 
     updatedData.save();
 

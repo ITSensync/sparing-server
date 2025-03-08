@@ -44,32 +44,28 @@ function defineDynamicNewModel(tableName) {
       allowNull: false,
       defaultValue: 0,
     },
-    diff_debit: {
+    debit2: {
       type: DataTypes.FLOAT,
       allowNull: false,
       defaultValue: 0,
-    },
-    rs_stat: {
-      type: DataTypes.FLOAT,
-      allowNull: true,
-      defaultValue: 0,
-    },
-    status_2m: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
     },
     status_1h: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
       defaultValue: false,
     },
-    feedback: {
+    umpanbalik: {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    time: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: DataTypes.NOW,
+    },
   }, {
     freezeTableName: true, // Agar nama tabel tidak otomatis diubah oleh Sequelize
-    timestamps: true,
+    timestamps: false,
   });
 }
 
