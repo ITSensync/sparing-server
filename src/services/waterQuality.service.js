@@ -1,6 +1,7 @@
 const { Device } = require('../model/Device');
 const defineDynamicNewModel = require('../model/DynamicNewData');
 const defineDynamicOldModel = require('../model/DynamicOldData');
+const { WaterLevel } = require('../model/WaterLevel');
 const { WaterQuality } = require('../model/WaterQuality');
 
 async function get() {
@@ -114,6 +115,20 @@ async function add(req) {
   }
 }
 
+async function addWaterLevel(req) {
+  try {
+    console.log(req.body);
+    const result = await WaterLevel.create(req.body);
+    return {
+      status: 200,
+      data: result,
+    };
+  } catch (error) {
+    console.error(error);
+    throw new Error(error);
+  }
+}
+
 async function update(body, unixtime) {
   try {
     console.log(unixtime);
@@ -144,6 +159,7 @@ async function update(body, unixtime) {
 
 module.exports = {
   add,
+  addWaterLevel,
   get,
   getLatest,
   update,

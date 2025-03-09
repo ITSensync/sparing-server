@@ -5,6 +5,11 @@ async function addData(req, res) {
   res.status(result.status).send(result);
 }
 
+async function addWaterLevelData(req, res) {
+  const result = await waterQualityServcice.addWaterLevel(req);
+  res.status(result.status).send(result);
+}
+
 async function updateData(req, res) {
   const result = await waterQualityServcice.update(req.body, req.params.unixtime);
   res.status(result.status).send(result);
@@ -22,6 +27,7 @@ async function getLatestData(req, res) {
 
 module.exports = {
   addData,
+  addWaterLevelData,
   getAllData,
   getLatestData,
   updateData,
