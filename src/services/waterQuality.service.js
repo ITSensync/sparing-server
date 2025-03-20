@@ -70,11 +70,12 @@ async function add(req) {
       await DynamicNewModel.sync({ alter: true });
 
       const {
-        rs_stat, feedback, createdAt, diff_debit, ...rawInputServer
+        rs_stat, feedback, createdAt, diff_debit_old, diff_debit_adjust, ...rawInputServer
       } = inputServer;
       const formattedBody = {
         ...rawInputServer,
-        debit2: diff_debit,
+        debit2: diff_debit_old,
+        debitAdjust: diff_debit_adjust,
         umpanbalik: feedback,
         time: createdAt,
       };
@@ -88,7 +89,7 @@ async function add(req) {
         tss: inputServer.tss,
         ph: inputServer.ph,
         debit: inputServer.debit,
-        debit2: inputServer.diff_debit,
+        debit2: inputServer.diff_debit_adjust,
         umpanbalik: inputServer.feedback,
       };
       result_device = await Device.update(inputDevice, {

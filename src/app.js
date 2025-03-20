@@ -25,10 +25,10 @@ app.use(express.json());
 (async () => {
   try {
     await sequelize.authenticate();
-    // WaterQuality.sync({ alter: true });
+    WaterQuality.sync({ alter: true });
     WaterLevel.sync({ alter: true });
     UserTelegram.sync();
-    // Device.sync({ alter: true });
+    Device.sync({ alter: true });
     console.log('Connection to the database has been established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);

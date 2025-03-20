@@ -49,6 +49,11 @@ const WaterQuality = db.define('sparing12', {
     allowNull: false,
     defaultValue: 0,
   },
+  debitAdjust: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 0,
+  },
   status_1h: {
     type: DataTypes.BOOLEAN,
     allowNull: true,
