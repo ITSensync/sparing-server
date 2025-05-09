@@ -43,6 +43,15 @@ async function noInternetNotification() {
   }
 }
 
+async function saveUserTelegram() {
+  try {
+    await telegramService.saveChatId();
+  } catch (error) {
+    console.error('Save User Telegram Error:', error.message);
+  }
+}
+
 module.exports = {
   noInternetNotification,
+  saveUserTelegram,
 };

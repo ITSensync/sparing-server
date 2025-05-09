@@ -45,4 +45,9 @@ cron.schedule('*/5 * * * *', async () => {
   cronJob.noInternetNotification();
 });
 
+cron.schedule('* * * * *', async () => {
+  console.info('Cron job save user telegram started at:', new Date().toISOString());
+  cronJob.saveUserTelegram();
+});
+
 module.exports = app;
