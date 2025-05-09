@@ -40,7 +40,7 @@ app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 
 // cron check-connection
-cron.schedule('*/60 * * * * *', async () => {
+cron.schedule('*/5 * * * *', async () => {
   // check connection and send notification if no internet every 30 s
   cronJob.noInternetNotification();
 });
