@@ -2,7 +2,7 @@ const telegramService = require('../services/telegram.service');
 const waterQualityService = require('../services/waterQuality.service');
 
 async function noInternetNotification() {
-  console.log('CRON CHECK INTERNET START...');
+  console.info('CRON CHECK INTERNET START...', new Date().toISOString());
   const teleAdminUser = await telegramService.getAll();
 
   if (!teleAdminUser) {
@@ -17,16 +17,20 @@ async function noInternetNotification() {
       throw new Error('No Latest data found!');
     }
 
-    const targetDate = new Date(latestData.createdAt);
+    const targetDate = latestData.time;
 
     // Mendapatkan waktu saat ini
     const currentDate = new Date();
+    const currentDateWIB = new Date(currentDate.getTime() + 7 * 60 * 60 * 1000);
 
     // Mendapatkan selisih waktu dalam milidetik
-    const differenceInMillis = currentDate - targetDate;
+    const differenceInMillis = currentDateWIB - targetDate;
 
     // Mengonversi milidetik ke menit
     const differenceInMinutes = Math.floor(differenceInMillis / (1000 * 60));
+    console.log(targetDate);
+    console.log(currentDateWIB);
+    console.log(differenceInMinutes);
 
     if (differenceInMinutes < 10) {
       console.log('Sparing Local Device Connected with Internet');
