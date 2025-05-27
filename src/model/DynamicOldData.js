@@ -9,7 +9,7 @@ function defineDynamicOldModel(tableName) {
       autoIncrement: true,
       type: DataTypes.INTEGER,
     },
-    ids: {
+    id_device: {
       allowNull: true,
       type: DataTypes.STRING,
       defaultValue: tableName,

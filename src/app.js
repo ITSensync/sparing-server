@@ -9,7 +9,7 @@ require('dotenv').config();
 
 const middlewares = require('./middlewares');
 const api = require('./api');
-const { WaterQuality } = require('./model/WaterQuality');
+// const { WaterQuality } = require('./model/WaterQuality');
 const { UserTelegram } = require('./model/UserTelegram');
 const cronJob = require('./scheduler/cron-job');
 const { Device } = require('./model/Device');
@@ -25,7 +25,7 @@ app.use(express.json());
 (async () => {
   try {
     await sequelize.authenticate();
-    WaterQuality.sync({ alter: true });
+    // WaterQuality.sync({ alter: true });
     WaterLevel.sync({ alter: true });
     UserTelegram.sync();
     Device.sync({ alter: true });

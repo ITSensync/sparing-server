@@ -64,7 +64,17 @@ async function add(req) {
     if (whitelistOldTable.includes(inputServer.ids)) {
       const DynamicOldModel = defineDynamicOldModel(inputServer.ids);
       await DynamicOldModel.sync();
-      result = await DynamicOldModel.create(inputServer);
+      const {
+        rs_stat, feedback, createdAt, diff_debit_old, diff_debit_adjust, ids, ...rawInputServer
+      } = inputServer;
+      const formattedBody = {
+        ...rawInputServer,
+        id_device: ids,
+        debit2: diff_debit_adjust,
+        umpanbalik: feedback,
+        time: createdAt,
+      };
+      result = await DynamicOldModel.create(formattedBody);
     } else {
       const DynamicNewModel = defineDynamicNewModel(inputServer.ids);
       await DynamicNewModel.sync({ alter: true });
