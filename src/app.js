@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-const cron = require('node-cron');
+// const cron = require('node-cron');
 const sequelize = require('./config/db.config');
 
 require('dotenv').config();
@@ -11,7 +11,7 @@ const middlewares = require('./middlewares');
 const api = require('./api');
 // const { WaterQuality } = require('./model/WaterQuality');
 const { UserTelegram } = require('./model/UserTelegram');
-const cronJob = require('./scheduler/cron-job');
+// const cronJob = require('./scheduler/cron-job');
 const { Device } = require('./model/Device');
 const { WaterLevel } = require('./model/WaterLevel');
 
@@ -40,14 +40,14 @@ app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 
 // cron check-connection
-cron.schedule('*/5 * * * *', async () => {
-  // check connection and send notification if no internet every 30 s
-  cronJob.noInternetNotification();
-});
+// cron.schedule('*/5 * * * *', async () => {
+//   // check connection and send notification if no internet every 30 s
+//   cronJob.noInternetNotification();
+// });
 
-cron.schedule('* * * * *', async () => {
-  console.info('Cron job save user telegram started at:', new Date().toISOString());
-  cronJob.saveUserTelegram();
-});
+// cron.schedule('* * * * *', async () => {
+//   console.info('Cron job save user telegram started at:', new Date().toISOString());
+//   cronJob.saveUserTelegram();
+// });
 
 module.exports = app;
