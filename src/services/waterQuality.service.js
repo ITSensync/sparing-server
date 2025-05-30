@@ -159,18 +159,46 @@ async function addWaterLevel(req) {
 
 async function update(body, unixtime) {
   try {
+    const whitelistOldTable = ['sparing01', 'sparing02', 'sparing03', 'sparing04', 'sparing05', 'sparing06', 'sparing07', 'sparing08', 'sparing09', 'sparing10', 'sparing11'];
+    const whitelistNewTable = ['sparing12', 'sparing13'];
     console.log(unixtime);
-    const updatedData = await WaterQuality.findOne({
-      where: { unixtime },
-    });
-
-    console.log(body);
-    if (body.status_1h) {
-      updatedData.status_1h = body.status;
+    if (!whitelistOldTable.includes(body.ids)
+      && !whitelistNewTable.includes(body.ids)) {
+      return {
+        status: 400,
+        message: 'TABLE NAME NOT VALID',
+      };
     }
-    updatedData.umpanbalik = body.feedback;
 
-    updatedData.save();
+    if (whitelistOldTable.includes(body.ids)) {
+      const DynamicOldModel = defineDynamicOldModel(body.ids);
+      await DynamicOldModel.sync();
+
+      const updatedData = await DynamicOldModel.findOne({
+        where: { unixtime },
+      });
+
+      console.log(body);
+
+      updatedData.umpanbalik = body.feedback;
+
+      updatedData.save();
+    } else {
+      const DynamicNewModel = defineDynamicNewModel(body.ids);
+      await DynamicNewModel.sync({ alter: true });
+
+      const updatedData = await DynamicNewModel.findOne({
+        where: { unixtime },
+      });
+
+      console.log(body);
+      if (body.status) {
+        updatedData.status_1h = body.status;
+      }
+      updatedData.umpanbalik = body.feedback;
+
+      updatedData.save();
+    }
 
     return {
       status: 200,
