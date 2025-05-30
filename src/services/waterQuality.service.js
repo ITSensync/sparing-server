@@ -75,6 +75,23 @@ async function add(req) {
         time: createdAt,
       };
       result = await DynamicOldModel.create(formattedBody);
+
+      // ADD TO DEVICE TBL
+      const inputDevice = {
+        id_device: inputServer.ids,
+        last_update: inputServer.createdAt,
+        cod: inputServer.cod,
+        tss: inputServer.tss,
+        ph: inputServer.ph,
+        debit: inputServer.debit,
+        debit2: inputServer.diff_debit_adjust,
+        umpanbalik: inputServer.feedback,
+      };
+      result_device = await Device.update(inputDevice, {
+        where: {
+          id_device: inputServer.ids,
+        },
+      });
     } else {
       const DynamicNewModel = defineDynamicNewModel(inputServer.ids);
       await DynamicNewModel.sync({ alter: true });
