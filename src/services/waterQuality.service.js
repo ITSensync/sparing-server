@@ -165,7 +165,7 @@ async function update(body, unixtime) {
     });
 
     console.log(body);
-    if (body.status) {
+    if (body.status_1h) {
       updatedData.status_1h = body.status;
     }
     updatedData.umpanbalik = body.feedback;
