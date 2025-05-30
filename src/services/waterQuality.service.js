@@ -67,7 +67,6 @@ async function add(req) {
       const {
         rs_stat, feedback, createdAt, diff_debit_old, diff_debit_adjust, ids, ...rawInputServer
       } = inputServer;
-      console.log(feedback);
       const formattedBody = {
         ...rawInputServer,
         id_device: ids,
@@ -165,8 +164,9 @@ async function update(body, unixtime) {
       where: { unixtime },
     });
 
-    if (body.status_1h) {
-      updatedData.status_1h = body.status_1h;
+    console.log(body);
+    if (body.status) {
+      updatedData.status_1h = body.status;
     }
     updatedData.umpanbalik = body.feedback;
 
