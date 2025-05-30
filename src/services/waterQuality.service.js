@@ -67,6 +67,7 @@ async function add(req) {
       const {
         rs_stat, feedback, createdAt, diff_debit_old, diff_debit_adjust, ids, ...rawInputServer
       } = inputServer;
+      console.log(feedback);
       const formattedBody = {
         ...rawInputServer,
         id_device: ids,
