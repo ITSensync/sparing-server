@@ -76,7 +76,7 @@ async function add(req) {
       };
       const existingDate = await DynamicOldModel.findOne({
         where: {
-          createdAt,
+          time: createdAt,
         },
       });
 
