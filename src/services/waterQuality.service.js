@@ -74,6 +74,18 @@ async function add(req) {
         umpanbalik: feedback,
         time: createdAt,
       };
+      const existingDate = await DynamicOldModel.findOne({
+        where: {
+          createdAt,
+        },
+      });
+
+      if (existingDate) {
+        return {
+          status: 409,
+          message: 'ADD DATA FAILED: EXISTING DATE',
+        };
+      }
       result = await DynamicOldModel.create(formattedBody);
 
       // ADD TO DEVICE TBL
@@ -106,6 +118,18 @@ async function add(req) {
         umpanbalik: feedback,
         time: createdAt,
       };
+      const existingDate = await DynamicNewModel.findOne({
+        where: {
+          createdAt,
+        },
+      });
+
+      if (existingDate) {
+        return {
+          status: 409,
+          message: 'ADD DATA FAILED: EXISTING DATE',
+        };
+      }
       result = await DynamicNewModel.create(formattedBody);
 
       // ADD TO DEVICE TBL
