@@ -120,7 +120,7 @@ async function add(req) {
       };
       const existingDate = await DynamicNewModel.findOne({
         where: {
-          createdAt,
+          time: createdAt,
         },
       });
 
