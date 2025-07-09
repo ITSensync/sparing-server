@@ -74,13 +74,14 @@ async function add(req) {
         umpanbalik: feedback,
         time: createdAt,
       };
-      const existingDate = await DynamicOldModel.findOne({
-        where: {
-          time: createdAt,
-        },
+      const latestData = await DynamicOldModel.findOne({
+        order: [
+          ['time', 'desc'],
+        ],
+        raw: true,
       });
 
-      if (existingDate) {
+      if (rawInputServer.unixtime - latestData.unixtime < 100) {
         return {
           status: 409,
           message: 'ADD DATA FAILED: EXISTING DATE',
