@@ -81,7 +81,9 @@ async function add(req) {
         raw: true,
       });
 
-      if (rawInputServer.unixtime - latestData.unixtime < 100) {
+      const diffUnixtime = rawInputServer.unixtime - latestData.unixtime < 100;
+      console.log(diffUnixtime);
+      if (diffUnixtime < 100) {
         return {
           status: 409,
           message: 'ADD DATA FAILED: EXISTING DATE',
