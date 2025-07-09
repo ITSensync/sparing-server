@@ -10,7 +10,7 @@ require('dotenv').config();
 const middlewares = require('./middlewares');
 const api = require('./api');
 // const { WaterQuality } = require('./model/WaterQuality');
-const { UserTelegram } = require('./model/UserTelegram');
+// const { UserTelegram } = require('./model/UserTelegram');
 // const cronJob = require('./scheduler/cron-job');
 const { Device } = require('./model/Device');
 const { WaterLevel } = require('./model/WaterLevel');
@@ -27,7 +27,7 @@ app.use(express.json());
     await sequelize.authenticate();
     // WaterQuality.sync({ alter: true });
     WaterLevel.sync({ alter: true });
-    UserTelegram.sync();
+    // UserTelegram.sync();
     Device.sync({ alter: true });
     console.log('Connection to the database has been established successfully.');
   } catch (error) {
