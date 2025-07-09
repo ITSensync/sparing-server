@@ -56,6 +56,7 @@ function defineDynamicOldModel(tableName) {
     time: {
       type: DataTypes.DATE,
       allowNull: false,
+      unique: true,
       defaultValue: DataTypes.NOW,
     },
   }, {
