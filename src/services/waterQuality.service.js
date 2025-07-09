@@ -81,7 +81,7 @@ async function add(req) {
         raw: true,
       });
 
-      const diffUnixtime = rawInputServer.unixtime - latestData.unixtime < 100;
+      const diffUnixtime = rawInputServer.unixtime - latestData.unixtime;
       console.log(diffUnixtime);
       if (diffUnixtime < 100) {
         return {
