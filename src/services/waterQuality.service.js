@@ -63,7 +63,7 @@ async function add(req) {
 
     if (whitelistOldTable.includes(inputServer.ids)) {
       const DynamicOldModel = defineDynamicOldModel(inputServer.ids);
-      await DynamicOldModel.sync();
+      await DynamicOldModel.sync({ alter: true });
       const {
         rs_stat, feedback, createdAt, diff_debit_old, diff_debit_adjust, ids, ...rawInputServer
       } = inputServer;
