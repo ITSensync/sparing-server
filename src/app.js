@@ -14,6 +14,8 @@ const api = require('./api');
 // const cronJob = require('./scheduler/cron-job');
 const { Device } = require('./model/Device');
 const { WaterLevel } = require('./model/WaterLevel');
+const Adjustment = require('./model/Adjustment');
+const { User } = require('./model/User');
 
 const app = express();
 
@@ -29,6 +31,8 @@ app.use(express.json());
     WaterLevel.sync({ alter: true });
     // UserTelegram.sync();
     Device.sync({ alter: true });
+    Adjustment.sync({ alter: true });
+    User.sync();
     console.log('Connection to the database has been established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
