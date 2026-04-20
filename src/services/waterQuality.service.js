@@ -152,6 +152,19 @@ async function add(req) {
       umpanbalik: input.feedback,
     };
 
+    const existingDate = await Model.findOne({
+      where: {
+        time: input.createdAt,
+      },
+    });
+
+    if (existingDate) {
+      return {
+        status: 409,
+        message: 'ADD DATA FAILED: EXISTING DATE',
+      };
+    }
+
     // ======================
     // PARALLEL EXECUTION
     // ======================
