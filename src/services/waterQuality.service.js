@@ -42,7 +42,141 @@ async function getLatest() {
   }
 }
 
+// ======================
+// MODEL CACHE
+// ======================
+const oldModelCache = {};
+const newModelCache = {};
+
+function getOldModel(ids) {
+  if (!oldModelCache[ids]) {
+    oldModelCache[ids] = defineDynamicOldModel(ids);
+  }
+  return oldModelCache[ids];
+}
+
+function getNewModel(ids) {
+  if (!newModelCache[ids]) {
+    newModelCache[ids] = defineDynamicNewModel(ids);
+  }
+  return newModelCache[ids];
+}
+
+// ======================
+// WHITELIST
+// ======================
+const whitelistOldTable = [
+  'sparing01', 'sparing02', 'sparing03', 'sparing04', 'sparing05',
+  'sparing06', 'sparing07', 'sparing08', 'sparing09', 'sparing10', 'sparing11',
+];
+
+const whitelistNewTable = ['sparing12', 'sparing13'];
+
+// ======================
+// MAIN FUNCTION
+// ======================
 async function add(req) {
+  try {
+    const input = req.body;
+
+    // VALIDASI TABLE
+    if (
+      !whitelistOldTable.includes(input.ids) && !whitelistNewTable.includes(input.ids)
+    ) {
+      return {
+        status: 400,
+        message: 'TABLE NAME NOT VALID',
+      };
+    }
+
+    const isOld = whitelistOldTable.includes(input.ids);
+
+    // AMBIL MODEL (CACHE)
+    const Model = isOld
+      ? getOldModel(input.ids)
+      : getNewModel(input.ids);
+
+    // ======================
+    // FORMAT DATA
+    // ======================
+    let formattedBody;
+
+    if (isOld) {
+      const {
+        rs_stat,
+        feedback,
+        createdAt,
+        diff_debit_old,
+        diff_debit_adjust,
+        ids,
+        ...rest
+      } = input;
+
+      formattedBody = {
+        ...rest,
+        id_device: ids,
+        debit2: diff_debit_adjust,
+        umpanbalik: feedback,
+        time: createdAt,
+      };
+    } else {
+      const {
+        rs_stat,
+        feedback,
+        createdAt,
+        diff_debit_old,
+        diff_debit_adjust,
+        ...rest
+      } = input;
+
+      formattedBody = {
+        ...rest,
+        debit2: diff_debit_old,
+        debitAdjust: diff_debit_adjust,
+        umpanbalik: feedback,
+        time: createdAt,
+      };
+    }
+
+    // ======================
+    // DEVICE UPDATE
+    // ======================
+    const inputDevice = {
+      id_device: input.ids,
+      last_update: input.createdAt,
+      cod: input.cod,
+      tss: input.tss,
+      ph: input.ph,
+      debit: input.debit,
+      debit2: input.diff_debit_adjust,
+      umpanbalik: input.feedback,
+    };
+
+    // ======================
+    // PARALLEL EXECUTION
+    // ======================
+    const [result] = await Promise.all([
+      Model.upsert(formattedBody), // insert/update tanpa findOne
+      Device.update(inputDevice, {
+        where: { id_device: input.ids },
+      }),
+    ]);
+
+    return {
+      status: 200,
+      data: result,
+    };
+  } catch (error) {
+    console.error('ADD ERROR:', error);
+    return {
+      status: 500,
+      message: 'INTERNAL SERVER ERROR',
+      error: error.message,
+    };
+  }
+}
+
+/* async function add(req) {
   try {
     // create input fields
     const whitelistOldTable = ['sparing01', 'sparing02', 'sparing03', 'sparing04', 'sparing05', 'sparing06', 'sparing07', 'sparing08', 'sparing09', 'sparing10', 'sparing11'];
@@ -63,7 +197,7 @@ async function add(req) {
 
     if (whitelistOldTable.includes(inputServer.ids)) {
       const DynamicOldModel = defineDynamicOldModel(inputServer.ids);
-      await DynamicOldModel.sync({ alter: true });
+      await DynamicOldModel.sync();
       const {
         rs_stat, feedback, createdAt, diff_debit_old, diff_debit_adjust, ids, ...rawInputServer
       } = inputServer;
@@ -106,7 +240,7 @@ async function add(req) {
       });
     } else {
       const DynamicNewModel = defineDynamicNewModel(inputServer.ids);
-      await DynamicNewModel.sync({ alter: true });
+      await DynamicNewModel.sync();
 
       const {
         rs_stat, feedback, createdAt, diff_debit_old, diff_debit_adjust, ...rawInputServer
@@ -165,7 +299,7 @@ async function add(req) {
     console.error(error);
     throw new Error(error);
   }
-}
+} */
 
 async function addWaterLevel(req) {
   try {
@@ -183,8 +317,9 @@ async function addWaterLevel(req) {
 
 async function update(body, unixtime) {
   try {
-    const whitelistOldTable = ['sparing01', 'sparing02', 'sparing03', 'sparing04', 'sparing05', 'sparing06', 'sparing07', 'sparing08', 'sparing09', 'sparing10', 'sparing11'];
-    const whitelistNewTable = ['sparing12', 'sparing13'];
+    // const whitelistOldTable = ['sparing01', 'sparing02', 'sparing03', 'sparing04', 'sparing05',
+    // 'sparing06', 'sparing07', 'sparing08', 'sparing09', 'sparing10', 'sparing11'];
+    // const whitelistNewTable = ['sparing12', 'sparing13'];
     console.log(unixtime);
     if (!whitelistOldTable.includes(body.ids)
       && !whitelistNewTable.includes(body.ids)) {
@@ -209,7 +344,7 @@ async function update(body, unixtime) {
       updatedData.save();
     } else {
       const DynamicNewModel = defineDynamicNewModel(body.ids);
-      await DynamicNewModel.sync({ alter: true });
+      await DynamicNewModel.sync();
 
       const updatedData = await DynamicNewModel.findOne({
         where: { unixtime },
