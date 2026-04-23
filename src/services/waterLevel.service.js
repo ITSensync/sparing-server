@@ -1,15 +1,28 @@
 const { WaterLevel } = require('../model/WaterLevel');
 
-async function getWaterLevel() {
+async function getWaterLevel(page = 1, limit = 10) {
   try {
-    const result = await WaterLevel.findAll({
+    const offset = (page - 1) * limit;
+
+    const { count, rows } = await WaterLevel.findAndCountAll({
+      offset,
+      limit,
       order: [
         ['time', 'desc'],
       ],
     });
+
+    const totalPages = Math.ceil(count / limit);
+
     return {
       status: 200,
-      data: result,
+      data: rows,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalItems: count,
+        itemsPerPage: limit,
+      },
     };
   } catch (error) {
     console.error(error);
