@@ -70,7 +70,7 @@ const whitelistOldTable = [
   'sparing06', 'sparing07', 'sparing08', 'sparing09', 'sparing10', 'sparing11',
 ];
 
-const whitelistNewTable = ['sparing12', 'sparing13'];
+const whitelistNewTable = ['sparing12', 'sparing13', 'sparing14', 'sparing15'];
 
 // ======================
 // MAIN FUNCTION
